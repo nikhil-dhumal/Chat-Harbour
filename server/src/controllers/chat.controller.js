@@ -87,16 +87,22 @@ const getAllChats = async (req, res) => {
     const chats = await chatModel.find({
       isGroup: false,
       members: { $in: [req.user.id] }
-    }).sort("-createdAt")
-
-    // Format chat data to include last message details
-    const userChats = chats.map((chat) => ({
-      chatId: chat._id,
-      lastMessage: chat.messages.length > 0 ? chat.messages[chat.messages.length - 1] : null
-    }))
+    })
+      .populate({
+        path: "messages",
+        options: { sort: { createdAt: -1 } },
+        populate: {
+          path: "sentBy",
+          model: "User"
+        }
+      })
+      .populate({
+        path: "members",
+        model: "User"
+      })
 
     // Respond with OK status and list of one-on-one chats
-    return responseHandler.ok(res, userChats)
+    return responseHandler.ok(res, chats)
   } catch {
     responseHandler.error(res)
   }
@@ -109,16 +115,22 @@ const getAllGroupChats = async (req, res) => {
     const groupChats = await chatModel.find({
       isGroup: true,
       members: { $in: [req.user.id] }
-    }).sort("-createdAt")
-
-    // Format group chat data to include last message details
-    const userGroupChats = groupChats.map((chat) => ({
-      chatId: chat._id,
-      lastMessage: chat.messages.length > 0 ? chat.messages[chat.messages.length - 1] : null
-    }))
+    })
+      .populate({
+        path: "messages",
+        options: { sort: { createdAt: -1 } },
+        populate: {
+          path: "sentBy",
+          model: "User"
+        }
+      })
+      .populate({
+        path: "members",
+        model: "User"
+      })
 
     // Respond with OK status and list of group chats
-    return responseHandler.ok(res, userGroupChats)
+    return responseHandler.ok(res, groupChats)
   } catch {
     responseHandler.error(res)
   }
