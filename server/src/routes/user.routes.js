@@ -92,11 +92,25 @@ router.get(
   // Validation for username
   body("username")
     .exists().withMessage("Username is required")
-    .isLength({ min: 8 }).withMessage("Username should be at least 8 characters long"),
+    .isLength({ min: 1 }).withMessage("Username should contain atleast one character"),
   // Middleware to handle validation errors
   requestHandler.validate,
   // Controller function for fetching user by username
   userController.getUserByName
+)
+
+// Route for blocking a user
+router.get(
+  '/block',
+  // Middleware to verify token authenticity
+  tokenMiddleware.auth,
+  // Validation for userId
+  body("userId")
+    .exists().withMessage("ID of user to be blocked is needed"),
+  // Middleware to handle validation errors
+  requestHandler.validate,
+  // Controller function for blocking a user
+  userController.blockUser
 )
 
 export default router

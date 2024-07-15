@@ -38,7 +38,7 @@ const signup = async (req, res) => {
       id: user.id
     })
   } catch {
-    responseHandler.error(res)
+    responseHandler.error(res) // Handle errors and respond with an error status
   }
 }
 
@@ -74,7 +74,7 @@ const signin = async (req, res) => {
       id: user.id
     })
   } catch {
-    responseHandler.error(res)
+    responseHandler.error(res) // Handle errors and respond with an error status
   }
 }
 
@@ -99,7 +99,7 @@ const updatePassword = async (req, res) => {
     // Respond with OK status
     responseHandler.ok(res)
   } catch {
-    responseHandler.error(res)
+    responseHandler.error(res) // Handle errors and respond with an error status
   }
 }
 
@@ -115,7 +115,7 @@ const getDetails = async (req, res) => {
     // Respond with OK status and user details
     responseHandler.ok(res, user)
   } catch {
-    responseHandler.error(res)
+    responseHandler.error(res) // Handle errors and respond with an error status
   }
 }
 
@@ -124,23 +124,57 @@ const getUserByName = async (req, res) => {
   try {
     const { username } = req.body
 
-    const user = await userModel.findOne({ username })
+    // Create a regular expression to match usernames that start with the provided username
+    const regex = new RegExp(`^${username}`, 'i') // 'i' makes the search case-insensitive
 
-    // Check if user exists
-    if (!user) return responseHandler.ok(res, null)  // Return null if user not found
-    
-    // Respond with OK status and user details
-    return responseHandler.ok(res, user)
+    // Find users with usernames that match the regular expression
+    const users = await userModel.find({ username: regex })
+
+    // Check if any users are found
+    if (users.length === 0) return responseHandler.ok(res, null) // Return null if no users found
+
+    // Respond with OK status and the list of users
+    return responseHandler.ok(res, users)
   } catch {
     // Respond with error status if something goes wrong
     return responseHandler.error(res)
   }
 }
 
+// Function to block a user
+const blockUser = async (req, res) => {
+  try {
+    const { userId } = req.body
+
+    // Find the user to be blocked by ID
+    const otherUser = await userModel.findById(userId)
+
+    // Check if the user to be blocked exists
+    if (!otherUser) return responseHandler.badrequest(res, "User not found.")
+
+    // Find the current user by ID
+    const user = await userModel.findById(req.user.id)
+
+    // Add the user to be blocked to the blocked list
+    user.blocked.push(userId)
+
+    // Save the updated user
+    await user.save()
+
+    // Respond with OK status
+    return responseHandler.ok(res, null)
+  } catch {
+    // Respond with error status if something goes wrong
+    return responseHandler.error(res)
+  }
+}
+
+// Exporting the functions as part of the default export object
 export default {
   signup,
   signin,
   updatePassword,
   getDetails,
-  getUserByName
+  getUserByName,
+  blockUser
 }
