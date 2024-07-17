@@ -1,18 +1,15 @@
 import { useDispatch, useSelector } from "react-redux"
 
 import { useTheme } from "@emotion/react"
-import { Avatar, Box, IconButton, Stack, Typography } from "@mui/material"
+import { Avatar, IconButton, Stack, Typography } from "@mui/material"
 import GroupsIcon from "@mui/icons-material/Groups"
 import CloseIcon from "@mui/icons-material/Close"
-import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined"
-import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined"
 
 import UserMenu from "./UserMenu"
-
-import { themeModes } from "../../configs/theme.configs"
+import ToggleTheme from "./ToggleTheme"
 
 import { setActiveChat } from "../../redux/features/activeChatSlice"
-import { setThemeMode } from "../../redux/features/themeModeSlice"
+
 
 import getProfileImg from "../../utils/getProfileImg"
 
@@ -22,15 +19,9 @@ const ProfileBar = () => {
 
   const { user } = useSelector((state) => state.user)
   const { activeChat } = useSelector((state) => state.activeChat)
-  const { themeMode } = useSelector((state) => state.themeMode)
 
   const handleChatClose = () => {
     dispatch(setActiveChat(null))
-  }
-
-  const onSwithTheme = () => {
-    const theme = themeMode === themeModes.dark ? themeModes.light : themeModes.dark
-    dispatch(setThemeMode(theme))
   }
 
   return (
@@ -49,20 +40,18 @@ const ProfileBar = () => {
           alignItems="center"
           justifyContent="space-between"
           sx={{
-            flex: 1,
+            width: { xs: "100%", sm: "50%", md: "35%", lg: "25%" },
+            display: {
+              xs: activeChat ? "none" : "flex",
+              sm: "flex"
+            },
             height: "100%",
             p: 2,
             borderRight: `1px solid ${theme.palette.secondary.main}`,
           }}
         >
           <UserMenu />
-          <IconButton
-            sx={{ color: "inherit" }}
-            onClick={onSwithTheme}
-          >
-            {themeMode === themeModes.dark && <DarkModeOutlinedIcon />}
-            {themeMode === themeModes.light && <WbSunnyOutlinedIcon />}
-          </IconButton>
+          <ToggleTheme />
         </Stack>
 
         <Stack
@@ -71,7 +60,7 @@ const ProfileBar = () => {
           justifyContent="space-between"
           gap={1}
           sx={{
-            flex: 4
+            flexGrow: 1
           }}
         >
           {

@@ -17,17 +17,17 @@ const themeConfigs = {
         contrastText: "rgb(255, 255, 255)"
       },
       background: {
-        default: "rgb(0, 0, 0)"
+        default: "rgb(35, 35, 35)"
       }
     } : {
       primary: {
-        main: "rgb(35, 181, 211)"
+        main: "rgb(35, 181, 211)",
       },
       secondary: {
-        main: "rgb(167, 85, 194)"
+        main: "rgb(167, 85, 194)",
       },
       background: {
-        default: "rgb(255, 255, 255)"
+        default: "rgb(180, 201, 189)"
       }
     }
 

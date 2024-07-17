@@ -19,6 +19,7 @@ const ChatsBoard = () => {
   const theme = useTheme()
   const dispatch = useDispatch()
 
+  const { activeChat } = useSelector((state) => state.activeChat)
   const { user } = useSelector((state) => state.user)
   const { groupEvent } = useSelector((state) => state.groupEvent)
 
@@ -47,9 +48,11 @@ const ChatsBoard = () => {
   return (
     <Stack
       sx={{
-        flex: 1,
-        px: 2,
-        pt: 2,
+        width: { xs: "100%", sm: "50%", md: "35%", lg: "25%" },
+        display: {
+          xs: activeChat ? "none" : "flex",
+          sm: "flex"
+        },
         height: "100%",
         borderRight: `1px solid ${theme.palette.secondary.main}`
       }}
@@ -60,6 +63,10 @@ const ChatsBoard = () => {
         gap={1}
         sx={{
           width: "100%",
+          py: 2,
+          pl: 2,
+          pr: 1,
+          borderBottom: `1px solid ${theme.palette.secondary.main}`,
         }}
       >
         <TextField

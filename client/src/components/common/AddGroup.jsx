@@ -92,8 +92,8 @@ const AddGroup = () => {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: "30%",
-            height: "50%",
+            width: { xs: "90%", md: "40%" },
+            height: "max-content",
             bgcolor: "background.default",
             p: 5
           }}

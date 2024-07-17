@@ -11,7 +11,7 @@ const Conversation = () => {
   return (
     <Stack
       sx={{
-        flex: 4,
+        flexGrow: 1,
         height: "100%",
       }}
     >

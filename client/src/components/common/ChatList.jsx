@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux"
 
+import { useTheme } from "@emotion/react"
 import { Avatar, Stack, Typography } from "@mui/material"
 import GroupsIcon from "@mui/icons-material/Groups"
 
@@ -10,6 +11,8 @@ import { setActiveChat } from "../../redux/features/activeChatSlice"
 import getProfileImg from "../../utils/getProfileImg"
 
 const ChatList = () => {
+  const theme = useTheme()
+
   const dispatch = useDispatch()
 
   const { chats } = useSelector((state) => state.chats)
@@ -27,7 +30,9 @@ const ChatList = () => {
       sx={{
         height: "100%",
         width: "100%",
-        my: 2,
+        mb: { xs: 0, md: 2 },
+        pt: 2,
+        pl: 2,
         overflowY: "auto",
         "&::-webkit-scrollbar": {
           display: "none"

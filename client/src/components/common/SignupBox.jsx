@@ -58,22 +58,22 @@ const SigninBox = () => {
       alignItems="center"
       justifyContent="center"
       sx={{
-        flex: 3,
-        p: 5,
-        borderTopRightRadius: "10px",
-        borderBottomRightRadius: "10px"
+        flex: { xs: 1, sm: 3 },
+        p: { xs: 0, sm: 5 },
+        borderTopRightRadius: { xs: 0, md: "10px" },
+        borderBottomRightRadius: { xs: 0, md: "10px" }
       }}
       component="form"
       onSubmit={signupForm.handleSubmit}
       onKeyDown={handleKeyDown}
     >
       <Typography
-        variant="h3"
         sx={{
           fontWeight: "500",
           background: `linear-gradient(to bottom, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
           WebkitTextFillColor: "transparent",
-          WebkitBackgroundClip: "text"
+          WebkitBackgroundClip: "text",
+          fontSize: { xs: "1.7rem", sm: "2.5rem"}
         }}
       >
         Sign Up Here
@@ -81,8 +81,8 @@ const SigninBox = () => {
       <Stack
         gap={3}
         sx={{
-          width: "60%",
-          mt: 5,
+          width: { xs: "80%", lg: "60%" },
+          mt: { xs: 3, sm: 5, md: 10 },
           pr: 1
         }}
       >
@@ -157,7 +157,7 @@ const SigninBox = () => {
       </Stack>
       <Box
         sx={{
-          width: "60%",
+          width: { xs: "80%", lg: "60%" },
           mb: 3
         }}
       >
@@ -166,7 +166,7 @@ const SigninBox = () => {
           fullWidth
           size="large"
           variant="contained"
-          sx={{ mt: 4 }}
+          sx={{ mt: 1 }}
           loading={isLoginRequest}
         >
           sign up
@@ -175,7 +175,12 @@ const SigninBox = () => {
       <Typography>Already have an account? <Link to="/signin" style={{ color: "#23B5D3", textDecoration: "none" }}>Sign in here</Link></Typography>
       {
         errorMessage && (
-          <Box sx={{ mt: 2 }}>
+          <Box 
+          sx={{ 
+            mt: { xs: 1, sm: 2 },
+              width: { xs: "80%", lg: "100%" }
+          }}
+          >
             <Alert severity="error" variant="outlined" >{errorMessage}</Alert>
           </Box>
         )

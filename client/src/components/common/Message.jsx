@@ -33,7 +33,9 @@ const Message = ({ message }) => {
                 sx={{
                   backgroundColor: "rgba(35, 181, 211, 0.5)",
                   p: 1,
-                  borderRadius: "5px"
+                  borderRadius: 0,
+                  borderTopLeftRadius: "5px",
+                  borderBottomRightRadius: "5px",
                 }}
               >
                 <Typography>{message.content}</Typography>
@@ -77,7 +79,9 @@ const Message = ({ message }) => {
                 sx={{
                   backgroundColor: "rgba(167, 85, 194, 0.5)",
                   p: 1,
-                  borderRadius: "5px"
+                  borderRadius: 0,
+                  borderTopRightRadius: "5px",
+                  borderBottomLeftRadius: "5px",
                 }}
               >
                 <Typography>{message.content}</Typography>

@@ -8,10 +8,13 @@ import ChatsBoard from "../components/common/ChatsBoard"
 import Conversation from "../components/common/Conversation"
 import ProfileBar from "../components/common/ProfileBar"
 
+import { themeModes } from "../configs/theme.configs"
+
 const HomePage = () => {
   const navigate = useNavigate()
 
   const { user } = useSelector((state) => state.user)
+  const { themeMode } = useSelector((state) => state.themeMode)
 
   useEffect(() => {
     if (!user) navigate("/signin")
@@ -31,9 +34,14 @@ const HomePage = () => {
           position: "relative",
           top: 0,
           left: 0,
-          m: "5vh",
-          height: "90vh",
-          backgroundImage: "linear-gradient(45deg, rgb(35, 181, 211, 0.3), rgb(167, 85, 194, 0.3)) !important"
+          m: { xs: 0, md: "5vh" },
+          height: { xs: "100vh", md: "90vh" },
+          backgroundImage:
+            themeMode === themeModes.dark
+              ? "linear-gradient(45deg, rgb(35, 181, 211, 0.5), rgb(167, 85, 194, 0.5)) !important"
+              : "linear-gradient(45deg, rgb(35, 181, 211, 0.7), rgb(167, 85, 194, 0.7)) !important"
+          ,
+          borderRadius: { xs: 0, md: "5px" }
         }}
       >
         <ProfileBar />
@@ -41,7 +49,7 @@ const HomePage = () => {
           <Stack
             direction="row"
             sx={{
-              height: "82vh"
+              height: { xs: "92vh", md: "82vh" }
             }}
           >
             <ChatsBoard />

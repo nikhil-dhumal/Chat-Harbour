@@ -20,19 +20,19 @@ const SignupPage = () => {
     <Paper
       elevation={24}
       sx={{
-        mt: "5vh",
-        mx: "10%",
-        height: "90vh",
-        borderRadius: "10px",
+        mt: { xs: 0, md: "5vh" },
+        mx: { xs: 0, md: "10%" },
+        height: { xs: "100vh", md: "90vh" },
+        borderRadius: { xs: 0, md: "10px" },
         backgroundColor: "background.default"
       }}
     >
       <Stack
-        direction="row"
         sx={{
-          height: 1,
-          borderTopLeftRadius: "10px",
-          borderBottomLeftRadius: "10px"
+          flexDirection: { xs: "column", sm: "row" },
+          height: "100%",
+          borderTopLeftRadius: { xs: 0, md: "10px" },
+          borderBottomLeftRadius: { xs: 0, md: "10px" }
         }}
       >
         <QuoteBox />
