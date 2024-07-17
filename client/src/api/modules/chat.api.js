@@ -4,17 +4,15 @@ const chatEndpoints = {
   newChat: "/chat",
   newChatGroup: "/chat/group",
   allChats: "/chat/all",
-  allChatGroups: "/chat/all-groups",
-  details: "/chat/details",
-  dmDetails: "/chat"
+  details: "/chat/"
 }
 
 const chatApi = {
-  newChat: async ({ receiverID }) => {
+  newChat: async ({ receiverId }) => {
     try {
       const response = await privateClient.post(
         chatEndpoints.newChat,
-        { receiverID }
+        { receiverId }
       )
 
       return { response }
@@ -22,11 +20,11 @@ const chatApi = {
       return { err }
     }
   },
-  newChat: async ({ groupName, memberIds}) => {
+  newGroupChat: async ({ groupName, memberIds }) => {
     try {
       const response = await privateClient.post(
         chatEndpoints.newChatGroup,
-        { groupName, memberIds}
+        { groupName, memberIds }
       )
 
       return { response }
@@ -43,32 +41,11 @@ const chatApi = {
       return { err }
     }
   },
-  allChatGroups: async () => {
-    try {
-      const response = await privateClient.get(chatEndpoints.allChatGroups)
-
-      return { response }
-    } catch (err) {
-      return { err }
-    }
-  },
   details: async ({ chatId }) => {
     try {
       const response = await privateClient.get(
         chatEndpoints.details,
-        { chatId }
-      )
-
-      return { response }
-    } catch (err) {
-      return { err }
-    }
-  },
-  getUserByName: async ({ username }) => {
-    try {
-      const response = await privateClient.get(
-        chatEndpoints.getUserByName,
-        { username }
+        { params: { chatId } }
       )
 
       return { response }

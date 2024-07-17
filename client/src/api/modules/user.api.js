@@ -59,8 +59,10 @@ const userApi = {
     try {
       const response = await privateClient.get(
         userEndpoints.getUserByName,
-        { username }
+        { params: { username } }
       )
+
+      return { response }
     } catch (err) {
       return { err }
     }
