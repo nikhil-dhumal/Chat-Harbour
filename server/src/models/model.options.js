@@ -1,21 +1,19 @@
 const modelOptions = {
   toJSON: {
-    virtuals: true, // Include virtuals when converting to JSON
-    // Customize the transformation of the output object
+    virtuals: true,
     transform: (_, obj) => {
-      delete obj._id  // Remove the _id field from the output
-      return obj      // Return the transformed object
+      delete obj._id
+      return obj
     }
   },
   toObject: {
-    virtuals: true, // Include virtuals when converting to a plain object
-    // Customize the transformation of the output object
+    virtuals: true,
     transform: (_, obj) => {
-      delete obj._id  // Remove the _id field from the output
-      return obj      // Return the transformed object
+      delete obj._id
+      return obj
     }
   },
-  timestamps: true // Add createdAt and updatedAt timestamps
+  timestamps: true
 }
 
 export default modelOptions
