@@ -2,71 +2,58 @@ import chatModel from "../models/chat.model.js"
 import messageModel from "../models/message.model.js"
 
 const socketHandler = (io) => {
+  const userRooms = new Map()
+
   io.on("connection", (socket) => {
-    console.log(`Socket connected: ${socket.id}`)
-
-    // Event: Join chat room
     socket.on("joinChat", async ({ chatId, userId }) => {
-      const chat = await chatModel.findById(chatId)
-
-      if (chat) {
-        socket.join(chatId)
-        io.to(chatId).emit("userConnected", { userId, chatId })
-        console.log(`User ${userId} joined chat ${chatId}`)
-      } else {
-        console.log(`Chat ${chatId} not found`)
+      try {
+        const chat = await chatModel.findById(chatId)
+        if (chat) {
+          if (!userRooms.has(socket.id)) {
+            userRooms.set(socket.id, new Set())
+          }
+          const userRoomSet = userRooms.get(socket.id)
+          if (!userRoomSet.has(chatId)) {
+            socket.join(chatId)
+            userRoomSet.add(chatId)
+          }
+        } else {
+          console.log(`Chat ${chatId} not found`)
+        }
+      } catch (error) {
+        console.error(`Error joining chat ${chatId}:`, error)
       }
     })
 
-    // Event: Send message
     socket.on("sendMessage", async ({ chatId, userId, content }) => {
-      const chat = await chatModel.findById(chatId)
+      try {
+        const chat = await chatModel.findById(chatId)
 
-      if (chat) {
-        const newMessage = new messageModel({
-          sentBy: userId,
-          content
-        })
+        if (chat) {
+          const newMessage = new messageModel({
+            sentBy: userId,
+            content,
+            chatId
+          })
+          await newMessage.save()
 
-        await newMessage.save()
+          chat.messages.push(newMessage._id)
+          chat.lastMessage = newMessage._id
+          await chat.save()
 
-        chat.messages.push(message.id)
-        chat.lastMessage = message.id
+          await newMessage.populate("sentBy", "username")
 
-        await chat.save()
-
-        io.to(chatId).emit("message", { userId, chatId, message })
-        console.log(`Message sent in chat ${chatId} by user ${userId}`)
-      } else {
-        console.log(`Chat ${chatId} not found`)
+          io.to(chatId).emit("message", newMessage)
+        } else {
+          console.log(`Chat ${chatId} not found`)
+        }
+      } catch (error) {
+        console.error(`Error sending message in chat ${chatId}:`, error)
       }
     })
 
-    // Event: Typing
-    socket.on("typing", async ({ chatId, userId }) => {
-      const chat = await chatModel.findById(chatId)
-
-      if (chat) {
-        io.to(chatId).emit("typing", { userId, chatId })
-      } else {
-        console.log(`Chat ${chatId} not found`)
-      }
-    })
-
-    // Event: Stop typing
-    socket.on("stopTyping", async ({ chatId, userId }) => {
-      const chat = await chatModel.findById(chatId)
-
-      if (chat) {
-        io.to(chatId).emit("stopTyping", { userId, chatId })
-      } else {
-        console.log(`Chat ${chatId} not found`)
-      }
-    })
-
-    // Handle disconnection
     socket.on("disconnect", () => {
-      console.log(`Socket disconnected: ${socket.id}`)
+      userRooms.delete(socket.id)
     })
   })
 }
