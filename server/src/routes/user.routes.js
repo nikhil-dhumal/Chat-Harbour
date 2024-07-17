@@ -1,5 +1,5 @@
 import express from "express"
-import { body } from "express-validator"
+import { body, query } from "express-validator"
 
 import userController from "../controllers/user.controller.js"
 import requestHandler from "../handlers/request.handler.js"
@@ -7,10 +7,8 @@ import tokenMiddleware from "../middleware/token.middleware.js"
 
 const router = express.Router()
 
-// Route for user signup
 router.post(
   "/signup",
-  // Validation for username, gender, password, and confirmPassword
   body("username")
     .exists().withMessage("Username is required")
     .isLength({ min: 8 }).withMessage("Username should be at least 8 characters long"),
@@ -27,35 +25,30 @@ router.post(
       }
       return true
     }),
-  // Middleware to handle validation errors
+  body("gender")
+    .custom((value) => {
+      if (value !== "male" && value !== "female") {
+        throw new Error("Gender must be either male' or 'female'")
+      }
+      return true
+    }),
   requestHandler.validate,
-  // Controller function for signup
   userController.signup
 )
 
-// Route for user signin
 router.post(
   "/signin",
-  // Validation for username and password
   body("username")
     .exists().withMessage("Username is required")
     .isLength({ min: 8 }).withMessage("Username should be at least 8 characters long"),
   body("password")
     .exists().withMessage("Password is required")
     .isLength({ min: 8 }).withMessage("Password should be at least 8 characters long"),
-  // Middleware to handle validation errors
   requestHandler.validate,
-  // Controller function for signin
   userController.signin
 )
-
-// Route for updating user password
 router.put(
-  "/update-password",
-  // Middleware to verify token authenticity
-  tokenMiddleware.auth,
-  // Validation for password, newPassword, and confirmNewPassword
-  body("password")
+  "/update-password", tokenMiddleware.auth, body("password")
     .exists().withMessage("Current password is required")
     .isLength({ min: 8 }).withMessage("Current password should be at least 8 characters long"),
   body("newPassword")
@@ -69,48 +62,23 @@ router.put(
       }
       return true
     }),
-  // Middleware to handle validation errors
   requestHandler.validate,
-  // Controller function for updating password
   userController.updatePassword
 )
 
-// Route for fetching user details
 router.get(
   "/details",
-  // Middleware to verify token authenticity
   tokenMiddleware.auth,
-  // Controller function for fetching user details
   userController.getDetails
 )
 
-// Route for fetching user by username
 router.get(
   "/username",
-  // Middleware to verify token authenticity
   tokenMiddleware.auth,
-  // Validation for username
-  body("username")
-    .exists().withMessage("Username is required")
-    .isLength({ min: 1 }).withMessage("Username should contain atleast one character"),
-  // Middleware to handle validation errors
+  query("username")
+    .exists().withMessage("Username is required"),
   requestHandler.validate,
-  // Controller function for fetching user by username
   userController.getUserByName
-)
-
-// Route for blocking a user
-router.get(
-  '/block',
-  // Middleware to verify token authenticity
-  tokenMiddleware.auth,
-  // Validation for userId
-  body("userId")
-    .exists().withMessage("ID of user to be blocked is needed"),
-  // Middleware to handle validation errors
-  requestHandler.validate,
-  // Controller function for blocking a user
-  userController.blockUser
 )
 
 export default router
