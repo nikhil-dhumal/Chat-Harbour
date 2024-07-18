@@ -13,10 +13,7 @@ const server = http.createServer(app)
 const io = new Server(server)
 
 app.use(
-  cors({
-    origin: process.env.FRONTEND_URL,
-    credentials: true
-  })
+  cors()
 )
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
