@@ -12,7 +12,6 @@ import ChatList from "../common/ChatList"
 import SearchList from "../common/SearchList"
 
 import { setChats } from "../../redux/features/chatsSlice"
-import { setGlobalLoading } from "../../redux/features/globalLoadingSlice"
 import { setGroupEvent } from "../../redux/features/groupEventSlice"
 
 const ChatsBoard = () => {
@@ -34,9 +33,7 @@ const ChatsBoard = () => {
     }
 
     const fetchChatsAndGroups = async () => {
-      dispatch(setGlobalLoading(true))
       await getChats()
-      dispatch(setGlobalLoading(false))
     }
 
     if (user) {
