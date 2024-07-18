@@ -104,5 +104,25 @@ Open your web browser and go to http://localhost:3000 to view the frontend appli
 
 ### Desktop
 
+### Sign up Page
+![Sign up Page](./screenshots/desktop/signup-page.png)
+
+### Search list
+![Search list](./screenshots/desktop/search-list.png)
+
+### Chat
+![Chat](./screenshots/desktop/chat.png)
+
+### New Group
+![New Group](./screenshots/desktop/new-group.png)
 
 ### Mobile
+
+### Sign in Page
+![Sign up Page](./screenshots/mobile/signin-page.png)
+
+### Group Chat
+![Group Chat](./screenshots/mobile/group-chat.png)
+
+### Update Password
+![Update Password](./screenshots/mobile/update-password.png)
