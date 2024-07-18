@@ -45,16 +45,15 @@ const HomePage = () => {
         }}
       >
         <ProfileBar />
-        <Stack>
-          <Stack
-            direction="row"
-            sx={{
-              height: { xs: "92vh", md: "82vh" }
-            }}
-          >
-            <ChatsBoard />
-            <Conversation />
-          </Stack>
+        <Stack
+          direction="row"
+          sx={{
+            height: { xs: "92vh", md: "82vh" },
+            width: "100%"
+          }}
+        >
+          <ChatsBoard />
+          <Conversation />
         </Stack>
       </Paper>
     </Box>

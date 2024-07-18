@@ -40,7 +40,7 @@ const ProfileBar = () => {
           alignItems="center"
           justifyContent="space-between"
           sx={{
-            width: { xs: "100%", sm: "50%", md: "35%", lg: "25%" },
+            width: { xs: "100%", sm: "35%", md: "30%", lg: "25%" },
             display: {
               xs: activeChat ? "none" : "flex",
               sm: "flex"
@@ -53,7 +53,6 @@ const ProfileBar = () => {
           <UserMenu />
           <ToggleTheme />
         </Stack>
-
         <Stack
           direction="row"
           alignItems="center"

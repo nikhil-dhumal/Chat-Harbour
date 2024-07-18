@@ -48,7 +48,7 @@ const ChatsBoard = () => {
   return (
     <Stack
       sx={{
-        width: { xs: "100%", sm: "50%", md: "35%", lg: "25%" },
+        width: { xs: "100%", sm: "35%", md: "30%", lg: "25%" },
         display: {
           xs: activeChat ? "none" : "flex",
           sm: "flex"
