@@ -39,7 +39,9 @@ const SearchList = ({ searchQuery }) => {
       sx={{
         height: "100%",
         width: "100%",
-        my: 2,
+        mb: { xs: 0, md: 2 },
+        pt: 2,
+        pl: 2,
         overflowY: "auto",
       }}
     >
