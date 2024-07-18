@@ -10,13 +10,29 @@ import socketHandler from "./src/handlers/socket.handler.js"
 
 const app = express()
 const server = http.createServer(app)
-const io = new Server(server)
+const io = new Server(server, {
+  cors: {
+    origin: process.env.FRONTEND_URL,
+    credentials: true
+  }
+})
 
 app.use(
-  cors()
+  cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+    allowedHeaders: "Content-Type,Authorization"
+  })
 )
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
+
+app.use((req, res, next) => {
+  console.log(`Received ${req.method} request for ${req.url}`)
+  next()
+})
 
 app.use("/api/v1", routes)
 
