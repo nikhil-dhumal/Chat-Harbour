@@ -12,6 +12,10 @@ const Conversation = () => {
     <Stack
       sx={{
         width: { xs: "100%", sm: "65%", md: "70%", lg: "75%" },
+        display: {
+          xs: activeChat ? "flex" : "none",
+          sm: "flex"
+        },
         height: "100%",
       }}
     >

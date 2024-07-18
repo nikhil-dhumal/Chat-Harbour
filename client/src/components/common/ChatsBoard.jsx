@@ -54,7 +54,7 @@ const ChatsBoard = () => {
           sm: "flex"
         },
         height: "100%",
-        borderRight: `1px solid ${theme.palette.secondary.main}`
+        borderRight: { xs: "none", sm: `1px solid ${theme.palette.secondary.main}` }
       }}
     >
       <Stack
