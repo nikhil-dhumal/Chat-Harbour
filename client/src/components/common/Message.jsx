@@ -1,12 +1,53 @@
+import { useState } from "react"
 import { useSelector } from "react-redux"
-
-import { Avatar, Paper, Stack, Typography } from "@mui/material"
-
+import { Avatar, Paper, Stack, Typography, Button } from "@mui/material"
 import formatTime from "../../utils/formatTime"
 import getProfileImg from "../../utils/getProfileImg"
 
+const maxChars = 200
+
 const Message = ({ message }) => {
   const { user } = useSelector((state) => state.user)
+
+  const [expanded, setExpanded] = useState(false)
+
+  const toggleExpanded = () => setExpanded(!expanded)
+
+  const renderContent = () => {
+    if (message.content.length <= maxChars) return message.content
+
+    if (expanded) {
+      return (
+        <>
+          {message.content}
+          <Typography
+            onClick={toggleExpanded}
+            sx={{
+              cursor: "pointer",
+              userSelect: "none"
+            }}
+          >
+            ...read less
+          </Typography>
+        </>
+      )
+    } else {
+      return (
+        <>
+          {message.content.slice(0, maxChars)}...
+          <Typography
+            onClick={toggleExpanded}
+            sx={{
+              cursor: "pointer",
+              userSelect: "none"
+            }}
+          >
+            ...read more
+          </Typography>
+        </>
+      )
+    }
+  }
 
   return (
     <Stack
@@ -38,7 +79,7 @@ const Message = ({ message }) => {
                   borderBottomRightRadius: "5px",
                 }}
               >
-                <Typography>{message.content}</Typography>
+                {renderContent()}
               </Paper>
               <Typography variant="caption" sx={{ textAlign: "right" }}>{formatTime(message.createdAt)}</Typography>
             </Stack>
@@ -84,7 +125,7 @@ const Message = ({ message }) => {
                   borderBottomLeftRadius: "5px",
                 }}
               >
-                <Typography>{message.content}</Typography>
+                {renderContent()}
               </Paper>
               <Typography variant="caption">{formatTime(message.createdAt)}</Typography>
             </Stack>
