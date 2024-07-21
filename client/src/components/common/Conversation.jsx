@@ -16,7 +16,7 @@ const Conversation = () => {
           xs: activeChat ? "flex" : "none",
           sm: "flex"
         },
-        height: "100%",
+        height: "100%"
       }}
     >
       {
