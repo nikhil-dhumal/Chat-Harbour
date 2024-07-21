@@ -59,7 +59,8 @@ const ProfileBar = () => {
           justifyContent="space-between"
           gap={1}
           sx={{
-            flexGrow: 1
+            flexGrow: 1,
+            height: "100%"
           }}
         >
           {
