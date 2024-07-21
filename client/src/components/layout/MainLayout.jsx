@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { Outlet } from "react-router-dom"
 
 import { Box } from "@mui/material"
@@ -7,11 +7,16 @@ import { Box } from "@mui/material"
 import GlobalLoading from "../common/GlobalLoading"
 
 import userApi from "../../api/modules/user.api"
-import { setUser } from "../../redux/features/userSlice"
+import chatApi from "../../api/modules/chat.api"
+
+import { setChats } from "../../redux/features/chatsSlice"
 import { setGlobalLoading } from "../../redux/features/globalLoadingSlice"
+import { setUser } from "../../redux/features/userSlice"
 
 const MainLayout = () => {
   const dispatch = useDispatch()
+
+  const { user } = useSelector((state) => state.user)
 
   useEffect(() => {
     const authUser = async () => {
@@ -28,6 +33,23 @@ const MainLayout = () => {
     dispatch(setGlobalLoading(true))
     authUser()
   }, [dispatch])
+
+  useEffect(() => {
+    const getChats = async () => {
+      const { response, err } = await chatApi.allChats()
+
+      if (response) dispatch(setChats(response))
+      if (err) dispatch(setChats([]))
+    }
+
+    const fetchChatsAndGroups = async () => {
+      await getChats()
+    }
+
+    if (user) {
+      fetchChatsAndGroups()
+    }
+  }, [user])
 
   return (
     <>
