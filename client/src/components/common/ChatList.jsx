@@ -1,7 +1,8 @@
+import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 
 import { useTheme } from "@emotion/react"
-import { Avatar, Stack, Typography } from "@mui/material"
+import { Avatar, Badge, Stack, Typography } from "@mui/material"
 import GroupsIcon from "@mui/icons-material/Groups"
 
 import chatApi from "../../api/modules/chat.api"
@@ -16,6 +17,7 @@ const ChatList = () => {
   const dispatch = useDispatch()
 
   const { chats } = useSelector((state) => state.chats)
+  const { onlineUsers } = useSelector((state) => state.onlineUsers)
 
   const handleClick = async (id) => {
     const { response, err } = await chatApi.details({ chatId: id })
@@ -58,10 +60,22 @@ const ChatList = () => {
                 ? (
                   <Avatar><GroupsIcon /></Avatar>
                 ) : (
-                  <Avatar
-                    alt={chat.receiver.username}
-                    src={getProfileImg({ gender: chat.receiver.gender, username: chat.receiver.username })}
-                  />
+                  <Badge
+                    overlap="circular"
+                    variant="dot"
+                    sx={{
+                      "& .MuiBadge-dot": {
+                        bgcolor: onlineUsers.includes(chat.receiver.id)
+                          ? "green"
+                          : "transparent"
+                      },
+                    }}
+                  >
+                    <Avatar
+                      alt={chat.receiver.username}
+                      src={getProfileImg({ gender: chat.receiver.gender, username: chat.receiver.username })}
+                    />
+                  </Badge>
                 )
             }
             <Stack
