@@ -1,46 +1,20 @@
-import { useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { useState } from "react"
+import { useSelector } from "react-redux"
 
 import { useTheme } from "@emotion/react"
 import { InputAdornment, Stack, TextField } from "@mui/material"
 import SearchIcon from "@mui/icons-material/Search"
 
-import chatApi from "../../api/modules/chat.api"
-
 import AddGroup from "./AddGroup"
 import ChatList from "../common/ChatList"
 import SearchList from "../common/SearchList"
 
-import { setChats } from "../../redux/features/chatsSlice"
-import { setGroupEvent } from "../../redux/features/groupEventSlice"
-
 const ChatsBoard = () => {
   const theme = useTheme()
-  const dispatch = useDispatch()
 
   const { activeChat } = useSelector((state) => state.activeChat)
-  const { user } = useSelector((state) => state.user)
-  const { groupEvent } = useSelector((state) => state.groupEvent)
 
   const [searchQuery, setSearchQuery] = useState("")
-
-  useEffect(() => {
-    const getChats = async () => {
-      const { response, err } = await chatApi.allChats()
-
-      if (response) dispatch(setChats(response))
-      if (err) dispatch(setChats([]))
-    }
-
-    const fetchChatsAndGroups = async () => {
-      await getChats()
-    }
-
-    if (user) {
-      dispatch(setGroupEvent(false))
-      fetchChatsAndGroups()
-    }
-  }, [user, searchQuery, groupEvent])
 
   return (
     <Stack
@@ -70,7 +44,10 @@ const ChatsBoard = () => {
           variant="outlined"
           id="search"
           sx={{
-            width: "100%"
+            width: "100%",
+            ".MuiInputBase-input": {
+              py: "10px"
+            }
           }}
           placeholder="Search..."
           value={searchQuery}
@@ -78,7 +55,7 @@ const ChatsBoard = () => {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <SearchIcon sx={{ pl: 0 }} />
+                <SearchIcon />
               </InputAdornment>
             )
           }}
