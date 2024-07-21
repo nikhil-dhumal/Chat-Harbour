@@ -6,40 +6,48 @@ const newChat = async (req, res) => {
   try {
     const { receiverId } = req.body
 
-    if (receiverId === req.user.id) return responseHandler.badrequest(res, "Receiver ID must be different from user ID")
+    if (receiverId === req.user.id) {
+      return responseHandler.badrequest(res, "Receiver ID must be different from user ID")
+    }
 
     const receiver = await userModel.findById(receiverId)
-    if (!receiver) return responseHandler.badrequest(res, "Receiver does not exist")
+    if (!receiver) {
+      return responseHandler.badrequest(res, "Receiver does not exist")
+    }
 
     const existingChat = await chatModel.findOne({
       isGroup: false,
       members: { $all: [receiverId, req.user.id] }
+    }).populate({
+      path: "messages",
+      model: "Message",
+      options: { sort: { createdAt: 1 } },
+      populate: {
+        path: "sentBy",
+        model: "User"
+      }
     })
 
-    if (existingChat) return responseHandler.ok(res, {
-      isGroup: existingChat.isGroup,
-      receiver,
-      lastMessage: existingChat.lastMessage,
-      id: existingChat._id
-    })
+    if (existingChat) {
+      return responseHandler.ok(res, {
+        ...existingChat.toJSON(),
+        receiver
+      })
+    }
 
-    const chat = new chatModel()
-    chat.isGroup = false
-    chat.members = [req.user.id, receiverId]
+    const chat = new chatModel({
+      isGroup: false,
+      members: [req.user.id, receiverId]
+    })
 
     await chat.save()
-
-    await chat
-      .populate({
-        path: "members",
-        model: "User"
-      })
 
     return responseHandler.created(res, {
       ...chat.toJSON(),
       receiver
     })
-  } catch {
+  } catch (error) {
+    console.error("Error creating new chat:", error)
     responseHandler.error(res)
   }
 }
@@ -49,7 +57,9 @@ const newGroupChat = async (req, res) => {
     const { memberIds, groupName } = req.body
 
     const oldChatGroup = await chatModel.findOne({ groupName })
-    if (oldChatGroup) return responseHandler.badrequest(res, "Group name is already in use")
+    if (oldChatGroup) {
+      return responseHandler.badrequest(res, "Group name is already in use")
+    }
 
     const findUser = async (id) => {
       const user = await userModel.findById(id)
@@ -59,32 +69,23 @@ const newGroupChat = async (req, res) => {
     }
 
     const members = await Promise.all(memberIds.map(id => findUser(id)))
+
     for (const member of members) {
       if (member === null) return responseHandler.badrequest(res, "User does not exist")
       if (member === "duplicate") return responseHandler.badrequest(res, "Group cannot contain duplicate users")
     }
 
-    const chat = new chatModel()
-    chat.isGroup = true
-    chat.groupName = groupName
-    chat.members = [...memberIds, req.user.id]
+    const chat = new chatModel({
+      isGroup: true,
+      groupName,
+      members: [...memberIds, req.user.id],
+    })
 
     await chat.save()
 
-    await chat
-      .populate({
-        path: "members",
-        model: "User"
-      })
-
-    await chat
-      .populate({
-        path: "members",
-        model: "User"
-      })
-
     return responseHandler.created(res, chat.toJSON())
-  } catch {
+  } catch (error) {
+    console.error("Error creating new group chat:", error)
     responseHandler.error(res)
   }
 }
@@ -95,34 +96,30 @@ const getAllChats = async (req, res) => {
       members: { $in: [req.user.id] }
     })
       .populate({
-        path: "lastMessage",
-        model: "Message"
-      })
-      .populate({
-        path: "members",
-        model: "User"
+        path: "messages",
+        options: { sort: { createdAt: 1 } },
+        populate: {
+          path: "sentBy",
+          model: "User"
+        }
       })
       .sort("-updatedAt")
 
-    const formattedChats = chats.map(chat => {
+    const formattedChats = await Promise.all(chats.map(async (chat) => {
       if (chat.isGroup) {
+        return chat.toJSON()
+      } else {
+        await chat.populate({
+          path: "members",
+          model: "User"
+        })
+
         return {
-          isGroup: chat.isGroup,
-          groupName: chat.groupName,
-          lastMessage: chat.lastMessage,
-          id: chat._id
+          ...chat.toJSON(),
+          receiver: chat.getReceiver(req.user.id)
         }
       }
-
-      const receiver = chat.members.find(member => member._id.toString() !== req.user.id.toString())
-
-      return {
-        isGroup: chat.isGroup,
-        receiver,
-        lastMessage: chat.lastMessage,
-        id: chat._id
-      }
-    })
+    }))
 
     return responseHandler.ok(res, formattedChats)
   } catch (error) {
@@ -144,32 +141,26 @@ const getDetails = async (req, res) => {
           model: "User"
         }
       })
-      .populate({
-        path: "members",
-        model: "User"
-      })
 
-    if (!chat) return responseHandler.badrequest(res, "Chat not found")
-
-    let receiver
-
-    if (!chat.isGroup) {
-      if (chat.members[0]._id.toString() === req.user.id.toString()) {
-        receiver = chat.members[1]
-      } else {
-        receiver = chat.members[0]
-      }
+    if (!chat) {
+      return responseHandler.badrequest(res, "Chat not found")
     }
 
     if (chat.isGroup) {
       return responseHandler.ok(res, chat.toJSON())
     } else {
+      await chat.populate({
+        path: "members",
+        model: "User"
+      })
+
       return responseHandler.ok(res, {
         ...chat.toJSON(),
-        receiver
+        receiver: chat.getReceiver(req.user.id)
       })
     }
-  } catch {
+  } catch (error) {
+    console.error("Error fetching chat details:", error)
     responseHandler.error(res)
   }
 }
