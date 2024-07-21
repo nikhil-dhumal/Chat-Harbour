@@ -2,21 +2,23 @@ import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 import { toast } from "react-toastify"
 
-
 import { LoadingButton } from "@mui/lab"
-import { Box, Chip, IconButton, MenuItem, Modal, OutlinedInput, Select, Stack, TextField } from "@mui/material"
+import { Autocomplete, Box, Chip, IconButton, Modal, Stack, TextField } from "@mui/material"
 import GroupAddIcon from "@mui/icons-material/GroupAdd"
 
 import userApi from "../../api/modules/user.api"
 import chatApi from "../../api/modules/chat.api"
 
+import { useSocket } from "../../contexts/SocketContext"
 
-import { setGroupEvent } from "../../redux/features/groupEventSlice"
 import { setActiveChat } from "../../redux/features/activeChatSlice"
+import { addChat } from "../../redux/features/chatsSlice"
 
 const AddGroup = () => {
   const dispatch = useDispatch()
 
+  const { sendNewChat } = useSocket()
+  
   const [open, setOpen] = useState(false)
   const [groupName, setGroupName] = useState("")
   const [users, setUsers] = useState([])
@@ -26,21 +28,14 @@ const AddGroup = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       const { response, err } = await userApi.getUserByName({ username: "" })
-
       if (response) setUsers(response)
       if (err) setUsers([])
     }
-
     if (open) fetchUsers()
   }, [open])
 
-  const handleGroupMembers = (e) => {
-    const {
-      target: { value },
-    } = e
-    setGroupMembers(
-      typeof value === "string" ? value.split(",") : value
-    )
+  const handleGroupMembers = (event, value) => {
+    setGroupMembers(value)
   }
 
   const handleClose = () => {
@@ -58,19 +53,16 @@ const AddGroup = () => {
 
   const handleAddGroup = async () => {
     setIsAddGroupRequest(true)
-
-    const memberIds = groupMembers.map((i) => users[i].id)
-
+    const memberIds = groupMembers.map((user) => user.id)
     const { response, err } = await chatApi.newGroupChat({ groupName, memberIds })
-
     if (response) {
       toast.success(`${groupName} created successfully`)
       dispatch(setActiveChat(response))
+      dispatch(addChat(response))
+      sendNewChat(response.id, null)
     }
-    if (err) toast.error(`${err}`)
-
+    if (err) toast.error(err.message)
     setIsAddGroupRequest(false)
-    dispatch(setGroupEvent(true))
     handleClose()
   }
 
@@ -107,32 +99,27 @@ const AddGroup = () => {
             value={groupName}
             onChange={(e) => setGroupName(e.target.value)}
           />
-          <Select
+          <Autocomplete 
             multiple
+            options={users}
+            getOptionLabel={(option) => option.username}
             value={groupMembers}
             onChange={handleGroupMembers}
             sx={{
-              width: "100%"
+              width: "100%",
             }}
-            renderValue={(selected) => (
-              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                {selected.map((value) => (
-                  <Chip key={value} label={`${users[value].username}`} />
-                ))}
-              </Box>
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                placeholder="Select usernames"
+              />
             )}
-          >
-            {
-              users?.map((user, index) => (
-                <MenuItem
-                  key={index}
-                  value={index}
-                >
-                  {user.username}
-                </MenuItem>
+            renderTags={(value, getTagProps) =>
+              value.map((option, index) => (
+                <Chip label={option.username} {...getTagProps({ index })} />
               ))
             }
-          </Select>
+          />
           <LoadingButton
             type="submit"
             fullWidth
