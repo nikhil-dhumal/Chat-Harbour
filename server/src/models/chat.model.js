@@ -1,5 +1,4 @@
 import mongoose from "mongoose"
-
 import modelOptions from "./model.options.js"
 
 const chatSchema = new mongoose.Schema({
@@ -25,6 +24,11 @@ const chatSchema = new mongoose.Schema({
     ref: "Message"
   }
 }, modelOptions)
+
+chatSchema.methods.getReceiver = function (userId) {
+  const receiver = this.members.find(member => member._id.toString() !== userId.toString())
+  return receiver
+}
 
 const chatModel = mongoose.model("Chat", chatSchema)
 
