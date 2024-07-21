@@ -1,20 +1,19 @@
-import { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { useSelector } from "react-redux"
-
 import { useTheme } from "@emotion/react"
 import { IconButton, Stack, TextField } from "@mui/material"
 import SendIcon from "@mui/icons-material/Send"
-
-import useSocket from "../../hooks/useSocket"
+import { useSocket } from "../../contexts/SocketContext"
 
 const MessageInput = () => {
   const theme = useTheme()
 
-  const { sendMessage } = useSocket()
-
+  const { sendMessage, isTyping, isNotTyping } = useSocket()
+  
   const { activeChat } = useSelector((state) => state.activeChat)
 
   const [message, setMessage] = useState("")
+  const [typingTimeout, setTypingTimeout] = useState(null)
 
   const sendMessageHandler = () => {
     if (message.trim() === "") return
@@ -28,6 +27,28 @@ const MessageInput = () => {
       sendMessageHandler()
     }
   }
+
+  useEffect(() => {
+    if (!activeChat) return
+
+    const handleTyping = () => {
+      // isTyping(activeChat.id)
+
+      clearTimeout(typingTimeout)
+
+      const timeout = setTimeout(() => {
+        // isNotTyping(activeChat.id)
+      }, 3000)
+
+      setTypingTimeout(timeout)
+    }
+
+    handleTyping()
+
+    return () => {
+      clearTimeout(typingTimeout)
+    }
+  }, [message, activeChat, isTyping, isNotTyping, typingTimeout])
 
   return (
     <Stack
@@ -49,6 +70,9 @@ const MessageInput = () => {
         variant="outlined"
         sx={{
           flexGrow: 1,
+          ".MuiInputBase-input": {
+            py: "10px"
+          }
         }}
         value={message}
         onChange={(e) => setMessage(e.target.value)}
