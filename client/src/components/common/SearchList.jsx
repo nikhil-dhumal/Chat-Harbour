@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 
 import { Avatar, Stack, Typography } from "@mui/material"
 
 import userApi from "../../api/modules/user.api"
 import chatApi from "../../api/modules/chat.api"
+
+import { useSocket } from "../../contexts/SocketContext"
 
 import { setActiveChat } from "../../redux/features/activeChatSlice"
 
@@ -12,6 +14,10 @@ import getProfileImg from "../../utils/getProfileImg"
 
 const SearchList = ({ searchQuery }) => {
   const dispatch = useDispatch()
+
+  const { activeChat } = useSelector((state) => state.activeChat)
+
+  const { sendNewChat } = useSocket()
 
   const [users, setusers] = useState([])
 
@@ -29,7 +35,10 @@ const SearchList = ({ searchQuery }) => {
   const handleClick = async (id) => {
     const { response, err } = await chatApi.newChat({ receiverId: id })
 
-    if (response) dispatch(setActiveChat(response))
+    if (response) {
+      dispatch(setActiveChat(response))
+      sendNewChat(response.id, id)
+    }
     if (err) dispatch(setActiveChat(null))
   }
 
@@ -43,6 +52,10 @@ const SearchList = ({ searchQuery }) => {
         pt: 2,
         pl: 2,
         overflowY: "auto",
+        "&::-webkit-scrollbar": {
+          display: "none"
+        },
+        scrollbarWidth: "none"
       }}
     >
       {
