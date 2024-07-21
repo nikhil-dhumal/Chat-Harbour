@@ -47,7 +47,7 @@ const ProfileBar = () => {
             },
             height: "100%",
             p: 2,
-            borderRight: `1px solid ${theme.palette.secondary.main}`,
+            borderRight: { xs: "none", sm: `1px solid ${theme.palette.secondary.main}` }
           }}
         >
           <UserMenu />
