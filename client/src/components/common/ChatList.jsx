@@ -28,7 +28,7 @@ const ChatList = () => {
       sx={{
         height: "100%",
         width: "100%",
-        py: 2,
+        py: 1,
         pl: 2,
         overflowY: "auto",
         "&::-webkit-scrollbar": {

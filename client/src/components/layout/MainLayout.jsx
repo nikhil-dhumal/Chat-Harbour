@@ -56,11 +56,9 @@ const MainLayout = () => {
       <GlobalLoading />
       <Box
         component="main"
+        flexGrow={1}
         overflow="hidden"
-        sx={{
-          minHeight: "100dvh",
-          minHeight: "100vh"
-        }}
+        minHeight="100vh"
       >
         <Outlet />
       </Box>
