@@ -1,6 +1,8 @@
 import { useState } from "react"
 import { useSelector } from "react-redux"
-import { Avatar, Paper, Stack, Typography, Button } from "@mui/material"
+
+import { Avatar, Paper, Stack, Typography } from "@mui/material"
+
 import formatTime from "../../utils/formatTime"
 import getProfileImg from "../../utils/getProfileImg"
 
@@ -76,7 +78,7 @@ const Message = ({ message }) => {
                   p: 1,
                   borderRadius: 0,
                   borderTopLeftRadius: "5px",
-                  borderBottomRightRadius: "5px",
+                  borderBottomRightRadius: "5px"
                 }}
               >
                 {renderContent()}
@@ -122,7 +124,7 @@ const Message = ({ message }) => {
                   p: 1,
                   borderRadius: 0,
                   borderTopRightRadius: "5px",
-                  borderBottomLeftRadius: "5px",
+                  borderBottomLeftRadius: "5px"
                 }}
               >
                 {renderContent()}
