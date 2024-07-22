@@ -1,4 +1,4 @@
-import { useState } from "react"
+import React, { useState } from "react"
 import { useSelector } from "react-redux"
 
 import { Avatar, Paper, Stack, Typography } from "@mui/material"
@@ -8,7 +8,7 @@ import getProfileImg from "../../utils/getProfileImg"
 
 const maxChars = 200
 
-const Message = ({ message }) => {
+const Message = React.forwardRef(({ message }, ref) => {
   const { user } = useSelector((state) => state.user)
 
   const [expanded, setExpanded] = useState(false)
@@ -53,6 +53,7 @@ const Message = ({ message }) => {
 
   return (
     <Stack
+      ref={ref}
       direction="row"
       alignItems="center"
       justifyContent={
@@ -136,6 +137,6 @@ const Message = ({ message }) => {
       }
     </Stack>
   )
-}
+})
 
 export default Message

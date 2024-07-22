@@ -8,10 +8,10 @@ import Message from "./Message"
 const MessageList = () => {
   const { activeChat } = useSelector((state) => state.activeChat)
 
-  const messagesEndRef = useRef(null)
+  const lastMessageRef = useRef(null)
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "auto" })
+    lastMessageRef.current?.scrollIntoView({ behavior: "auto" })
   }
 
   useLayoutEffect(() => {
@@ -19,27 +19,28 @@ const MessageList = () => {
   }, [activeChat])
 
   return (
-    <>
-      <Stack
-        gap={3}
-        sx={{
-          pt: 2,
-          overflowY: "auto",
-          height: "100%",
-          "&::-webkit-scrollbar": {
-            display: "none"
-          },
-          scrollbarWidth: "none"
-        }}
-      >
-        {
-          activeChat?.messages?.map((message, index) => (
-            <Message message={message} key={index} />
-          ))
-        }
-      </Stack>
-      <div ref={messagesEndRef} />
-    </>
+    <Stack
+      gap={3}
+      sx={{
+        py: 1,
+        overflowY: "auto",
+        height: "100%",
+        "&::-webkit-scrollbar": {
+          display: "none"
+        },
+        scrollbarWidth: "none"
+      }}
+    >
+      {
+        activeChat?.messages?.map((message, index) => (
+          <Message
+            message={message}
+            key={index}
+            ref={index === activeChat.messages.length - 1 ? lastMessageRef : null}
+          />
+        ))
+      }
+    </Stack>
   )
 }
 
