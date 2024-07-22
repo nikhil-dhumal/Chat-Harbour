@@ -22,11 +22,14 @@ Chat Harbour is a real-time chat application designed to:
 ## Features
 
  - **User Authentication:** Secure signup and login functionalities.
- - **One-on-One Chat:** Private messaging between two users.
+ - **Real-Time Messaging:** Seamless communication with live message updates.
+ - **One-on-One Chat:** Private messaging between users.
  - **Group Chat:** Create and join group conversations.
+ - **Online Badge:** Indicates users' online status with a small dot or badge.
+ - **Typing Events:** Displays a message when a user is typing in real-time.
+ - **Display Last Message:** Shows the latest message in chat previews.
  - **Search Usernames:** Easily find and add friends by their usernames.
- - **User Interaction:** Real-time messaging and notifications.
- - **Responsive Design:** Built with Material-UI for an appealing and responsive interface.
+ - **Responsive Design:** Built with Material-UI for an appealing and adaptive interface.
 
 ## Technologies
 
