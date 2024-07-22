@@ -22,12 +22,7 @@ const HomePage = () => {
       sx={{
         position: "absolute",
         height: "100vh",
-        width: "100%",
-        "--full-height": "100vh",
-        "@supports (height: 100dvh)": {
-          "--full-height": "100dvh"
-        },
-        height: "var(--full-height)"
+        width: "100%"
       }}
     >
       <Paper

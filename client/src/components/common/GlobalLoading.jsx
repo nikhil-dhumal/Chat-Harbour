@@ -13,14 +13,8 @@ const GlobalLoading = () => {
         pointerEvents: "none",
         transition: "all .5s ease",
         position: "fixed",
-        width: "100vw",
-        height: "100vh",
         width: "100%",
-        "--full-height": "100vh",
-        "@supports (height: 100dvh)": {
-          "--full-height": "100dvh"
-        },
-        height: "var(--full-height)",
+        height: "100vh",
         zIndex: 999
       }}
     >

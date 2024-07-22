@@ -22,6 +22,7 @@ const MessageList = () => {
     <Stack
       gap={3}
       sx={{
+        pt: 2,
         overflowY: "auto",
         height: "100%",
         "&::-webkit-scrollbar": {
