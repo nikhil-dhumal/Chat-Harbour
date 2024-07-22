@@ -16,11 +16,11 @@ import { setUser } from "../../redux/features/userSlice"
 
 const SigninBox = () => {
   const theme = useTheme()
-  
+
   const dispatch = useDispatch()
 
-  const [isLoginRequest, setIsLoginRequest] = useState(false)
   const [errorMessage, setErrorMessage] = useState()
+  const [signupRequested, setSignupRequested] = useState(false)
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -37,11 +37,11 @@ const SigninBox = () => {
     },
     onSubmit: async (values) => {
       setErrorMessage(undefined)
-      setIsLoginRequest(true)
+      setSignupRequested(true)
 
       const { response, err } = await userApi.signUp(values)
 
-      setIsLoginRequest(false)
+      setSignupRequested(false)
 
       if (response) {
         signupForm.resetForm()
@@ -73,7 +73,7 @@ const SigninBox = () => {
           background: `linear-gradient(to bottom, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
           WebkitTextFillColor: "transparent",
           WebkitBackgroundClip: "text",
-          fontSize: { xs: "1.7rem", sm: "2.5rem"}
+          fontSize: { xs: "1.7rem", sm: "2.5rem" }
         }}
       >
         Sign Up Here
@@ -167,19 +167,21 @@ const SigninBox = () => {
           size="large"
           variant="contained"
           sx={{ mt: 1 }}
-          loading={isLoginRequest}
+          loading={signupRequested}
         >
           sign up
         </LoadingButton>
       </Box>
-      <Typography>Already have an account? <Link to="/signin" style={{ color: "#23B5D3", textDecoration: "none" }}>Sign in here</Link></Typography>
+      <Typography>
+        Already have an account? <Link to="/signin" style={{ color: "#23B5D3", textDecoration: "none" }}>Sign in here</Link>
+      </Typography>
       {
         errorMessage && (
-          <Box 
-          sx={{ 
-            mt: { xs: 1, sm: 2 },
+          <Box
+            sx={{
+              mt: { xs: 1, sm: 2 },
               width: { xs: "80%", lg: "100%" }
-          }}
+            }}
           >
             <Alert severity="error" variant="outlined" >{errorMessage}</Alert>
           </Box>
