@@ -7,14 +7,15 @@ import CloseIcon from "@mui/icons-material/Close"
 
 import UserMenu from "./UserMenu"
 import ToggleTheme from "./ToggleTheme"
+import TypingStatus from "./TypingStatus"
 
 import { setActiveChat } from "../../redux/features/activeChatSlice"
-
 
 import getProfileImg from "../../utils/getProfileImg"
 
 const ProfileBar = () => {
   const theme = useTheme()
+
   const dispatch = useDispatch()
 
   const { user } = useSelector((state) => state.user)
@@ -60,15 +61,14 @@ const ProfileBar = () => {
           gap={1}
           sx={{
             flexGrow: 1,
+            ml: 2,
+            mr: 1,
             height: "100%"
           }}
         >
           {
             activeChat && (
               <>
-                <IconButton onClick={handleChatClose} sx={{ ml: 1 }}>
-                  <CloseIcon />
-                </IconButton>
                 <Stack
                   direction="row"
                   alignItems="center"
@@ -77,23 +77,31 @@ const ProfileBar = () => {
                     pr: 2
                   }}
                 >
-                  {activeChat.isGroup ? (
-                    <Avatar>
-                      <GroupsIcon />
-                    </Avatar>
-                  ) : (
-                    <Avatar
-                      alt={activeChat.receiver.username}
-                      src={getProfileImg({
-                        gender: activeChat.receiver.gender,
-                        username: activeChat.receiver.username
-                      })}
-                    />
-                  )}
-                  <Typography>
-                    {activeChat.isGroup ? activeChat.groupName : activeChat.receiver.username}
-                  </Typography>
+                  {
+                    activeChat.isGroup ? (
+                      <Avatar>
+                        <GroupsIcon />
+                      </Avatar>
+                    ) : (
+                      <Avatar
+                        alt={activeChat.receiver.username}
+                        src={getProfileImg({
+                          gender: activeChat.receiver.gender,
+                          username: activeChat.receiver.username
+                        })}
+                      />
+                    )
+                  }
+                  <Stack alignItems="flex-start">
+                    <Typography>
+                      {activeChat.isGroup ? activeChat.groupName : activeChat.receiver.username}
+                    </Typography>
+                    <TypingStatus chat={activeChat} />
+                  </Stack>
                 </Stack>
+                <IconButton onClick={handleChatClose}>
+                  <CloseIcon />
+                </IconButton>
               </>
             )
           }
