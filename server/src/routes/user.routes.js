@@ -47,6 +47,7 @@ router.post(
   requestHandler.validate,
   userController.signin
 )
+
 router.put(
   "/update-password", tokenMiddleware.auth, body("password")
     .exists().withMessage("Current password is required")
