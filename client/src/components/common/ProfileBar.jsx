@@ -47,7 +47,9 @@ const ProfileBar = () => {
               sm: "flex"
             },
             height: "100%",
-            p: 2,
+            py: 2,
+            pl: 2,
+            pr: 1,
             borderRight: { xs: "none", sm: `1px solid ${theme.palette.secondary.main}` }
           }}
         >
@@ -60,9 +62,13 @@ const ProfileBar = () => {
           justifyContent="space-between"
           gap={1}
           sx={{
-            flexGrow: 1,
-            ml: 2,
-            mr: 1,
+            width: { xs: "100%", sm: "65%", md: "70%", lg: "75%" },
+            display: {
+              xs: activeChat ? "flex" : "none",
+              sm: "flex"
+            },
+            pl: 2,
+            pr: 1,
             height: "100%"
           }}
         >
