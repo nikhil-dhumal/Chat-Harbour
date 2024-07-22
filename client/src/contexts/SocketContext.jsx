@@ -2,9 +2,10 @@ import React, { createContext, useContext, useEffect, useCallback, useState } fr
 import { useDispatch, useSelector } from "react-redux"
 import { io } from "socket.io-client"
 
-import { addChat } from "../redux/features/chatsSlice"
 import { addMessage } from "../redux/features/activeChatSlice"
+import { addChat, addMessageToChat } from "../redux/features/chatsSlice"
 import { addUser, removeUser, setOnlineUsers } from "../redux/features/onlineUsersSlice"
+import { addUserTyping, removeUserTyping } from "../redux/features/usersTypingSlice"
 
 const SocketContext = createContext()
 
@@ -43,20 +44,20 @@ export const SocketProvider = ({ children }) => {
       })
 
       newSocket.on("newChat", (chat) => {
-        console.log(chat);
         dispatch(addChat(chat))
       })
 
       newSocket.on("message", ({ chatId, message }) => {
         dispatch(addMessage({ chatId, message }))
+        dispatch(addMessageToChat({ chatId, message }))
       })
 
-      newSocket.on("isTyping", ({ userId }) => {
-        console.log(`${userId} is typing`)
+      newSocket.on("isTyping", ({ userId, chatId }) => {
+        dispatch(addUserTyping({ userId, chatId }))
       })
 
-      newSocket.on("isNotTyping", ({ userId }) => {
-        console.log(`${userId} is not typing`)
+      newSocket.on("isNotTyping", ({ userId, chatId }) => {
+        dispatch(removeUserTyping({ userId, chatId }))
       })
 
       newSocket.on("disconnect", () => {
