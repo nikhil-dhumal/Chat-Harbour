@@ -6,8 +6,8 @@ import { InputAdornment, Stack, TextField } from "@mui/material"
 import SearchIcon from "@mui/icons-material/Search"
 
 import AddGroup from "./AddGroup"
-import ChatList from "../common/ChatList"
-import SearchList from "../common/SearchList"
+import ChatList from "./ChatList"
+import SearchList from "./SearchList"
 
 const ChatsBoard = () => {
   const theme = useTheme()

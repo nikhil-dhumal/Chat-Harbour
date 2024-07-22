@@ -19,8 +19,8 @@ const SigninBox = () => {
 
   const dispatch = useDispatch()
 
-  const [isLoginRequest, setIsLoginRequest] = useState(false)
   const [errorMessage, setErrorMessage] = useState()
+  const [signinRequested, setSigninRequested] = useState(false)
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -35,11 +35,11 @@ const SigninBox = () => {
     },
     onSubmit: async (values) => {
       setErrorMessage(undefined)
-      setIsLoginRequest(true)
+      setSigninRequested(true)
 
       const { response, err } = await userApi.signIn(values)
 
-      setIsLoginRequest(false)
+      setSigninRequested(false)
 
       if (response) {
         signinForm.resetForm()
@@ -71,7 +71,7 @@ const SigninBox = () => {
           background: `linear-gradient(to bottom, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
           WebkitTextFillColor: "transparent",
           WebkitBackgroundClip: "text",
-          fontSize: { xs: "1.7rem", sm: "2.5rem"}
+          fontSize: { xs: "1.7rem", sm: "2.5rem" }
         }}
       >
         Sign In Here
@@ -131,12 +131,14 @@ const SigninBox = () => {
           size="large"
           variant="contained"
           sx={{ mt: 4 }}
-          loading={isLoginRequest}
+          loading={signinRequested}
         >
           sign in
         </LoadingButton>
       </Box>
-      <Typography>Don"t have an account yet? <Link to="/signup" style={{ color: "#23B5D3", textDecoration: "none" }}>Sign up here</Link></Typography>
+      <Typography>
+        Don't have an account yet? <Link to="/signup" style={{ color: "#23B5D3", textDecoration: "none" }}>Sign up here</Link>
+      </Typography>
       {
         errorMessage && (
           <Box

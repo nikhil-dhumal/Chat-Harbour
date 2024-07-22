@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 
 import { Avatar, Stack, Typography } from "@mui/material"
 
@@ -14,8 +14,6 @@ import getProfileImg from "../../utils/getProfileImg"
 
 const SearchList = ({ searchQuery }) => {
   const dispatch = useDispatch()
-
-  const { activeChat } = useSelector((state) => state.activeChat)
 
   const { sendNewChat } = useSocket()
 

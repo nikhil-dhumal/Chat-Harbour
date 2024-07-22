@@ -1,20 +1,21 @@
-import { useEffect, useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { useFormik } from "formik"
 import { toast } from "react-toastify"
 
 import { LoadingButton } from "@mui/lab"
 import { useTheme } from "@emotion/react"
-import { Alert, Box, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField, Typography } from "@mui/material"
+import { Alert, Box, Stack, TextField, Typography } from "@mui/material"
 import LockPersonIcon from "@mui/icons-material/LockPerson"
 
 import userApi from "../../api/modules/user.api"
 
 const SigninBox = () => {
   const theme = useTheme()
+
   const navigate = useNavigate()
 
-  const [isLoginRequest, setIsLoginRequest] = useState(false)
+  const [updateResquested, setUpdateRequested] = useState(false)
   const [errorMessage, setErrorMessage] = useState()
 
   const handleKeyDown = (e) => {
@@ -31,11 +32,11 @@ const SigninBox = () => {
     },
     onSubmit: async (values) => {
       setErrorMessage(undefined)
-      setIsLoginRequest(true)
+      setUpdateRequested(true)
 
       const { response, err } = await userApi.updatePassword(values)
 
-      setIsLoginRequest(false)
+      setUpdateRequested(false)
 
       if (response) {
         passUpdateForm.resetForm()
@@ -144,7 +145,7 @@ const SigninBox = () => {
           size="large"
           variant="contained"
           sx={{ mt: 4 }}
-          loading={isLoginRequest}
+          loading={updateResquested}
         >
           Update Password
         </LoadingButton>
