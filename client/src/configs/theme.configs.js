@@ -27,7 +27,7 @@ const themeConfigs = {
         main: "rgb(167, 85, 194)",
       },
       background: {
-        default: "rgb(180, 201, 189)"
+        default: "rgb(255, 255, 255)"
       }
     }
 
@@ -40,13 +40,6 @@ const themeConfigs = {
         MuiButton: {
           defaultProps: {
             disableRipple: true
-          },
-          styleOverrides: {
-            root: {
-              backgroundImage: "linear-gradient(to right, #23B5D3, #A755C2)",
-              borderRadius: "5px",
-              color: "#ffffff"
-            }
           }
         }
       }
