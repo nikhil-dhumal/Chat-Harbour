@@ -8,13 +8,10 @@ import ChatsBoard from "../components/common/ChatsBoard"
 import Conversation from "../components/common/Conversation"
 import ProfileBar from "../components/common/ProfileBar"
 
-import { themeModes } from "../configs/theme.configs"
-
 const HomePage = () => {
   const navigate = useNavigate()
 
   const { user } = useSelector((state) => state.user)
-  const { themeMode } = useSelector((state) => state.themeMode)
 
   useEffect(() => {
     if (!user) navigate("/signin")
@@ -25,7 +22,7 @@ const HomePage = () => {
       sx={{
         position: "absolute",
         height: "100vh",
-        width: "100%",
+        width: "100%"
       }}
     >
       <Paper
@@ -36,10 +33,7 @@ const HomePage = () => {
           left: 0,
           m: { xs: 0, md: "5vh" },
           height: { xs: "100vh", md: "90vh" },
-          backgroundImage:
-            themeMode === themeModes.dark
-              ? "linear-gradient(45deg, rgb(35, 181, 211, 0.5), rgb(167, 85, 194, 0.5)) !important"
-              : "linear-gradient(45deg, rgb(35, 181, 211, 0.7), rgb(167, 85, 194, 0.7)) !important"
+          backgroundImage: "linear-gradient(45deg, rgb(35, 181, 211, 0.5), rgb(167, 85, 194, 0.5))"
           ,
           borderRadius: { xs: 0, md: "5px" }
         }}
