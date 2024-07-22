@@ -21,8 +21,7 @@ const PassUpdatePage = () => {
       sx={{
         mt: { xs: 0, md: "5vh" },
         mx: { xs: 0, md: "10%" },
-        minHeight: { xs: "100dvh", md: "90vh" },
-        minHeight: { xs: "100vh", md: "90vh" },
+        height: { xs: "100vh", md: "90vh" },
         borderRadius: { xs: 0, md: "10px" },
         bgcolor: "background.default"
       }}

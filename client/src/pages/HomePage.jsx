@@ -21,8 +21,7 @@ const HomePage = () => {
     <Box
       sx={{
         position: "absolute",
-        minHeight: "100dvh",
-        minHeight: "100vh",
+        height: "100vh",
         width: "100%"
       }}
     >
@@ -33,8 +32,7 @@ const HomePage = () => {
           top: 0,
           left: 0,
           m: { xs: 0, md: "5vh" },
-          minHeight: { xs: "100dvh", md: "90vh" },
-          minHeight: { xs: "100vh", md: "90vh" },
+          height: { xs: "100vh", md: "90vh" },
           backgroundImage: "linear-gradient(45deg, rgb(35, 181, 211, 0.5), rgb(167, 85, 194, 0.5))"
           ,
           borderRadius: { xs: 0, md: "5px" }
@@ -44,8 +42,7 @@ const HomePage = () => {
         <Stack
           direction="row"
           sx={{
-            minHeight: { xs: "92vh", md: "82vh" },
-            minHeight: { xs: "92dvh", md: "82dvh" },
+            height: { xs: "92vh", md: "82vh" },
             width: "100%"
           }}
         >
