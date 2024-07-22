@@ -1,6 +1,5 @@
 import chatModel from "../models/chat.model.js"
 import messageModel from "../models/message.model.js"
-import userModel from "../models/user.model.js"
 
 const socketHandler = (io) => {
   const userRooms = new Map()
@@ -21,11 +20,14 @@ const socketHandler = (io) => {
     socket.on("joinChat", async ({ chatId }) => {
       try {
         const chat = await chatModel.findById(chatId)
+
         if (chat) {
           if (!userRooms.has(socket.id)) {
             userRooms.set(socket.id, new Set())
           }
+
           const userRoomSet = userRooms.get(socket.id)
+          
           if (!userRoomSet.has(chatId)) {
             socket.join(chatId)
             userRoomSet.add(chatId)
@@ -91,11 +93,11 @@ const socketHandler = (io) => {
     })
 
     socket.on("sendIsTyping", ({ chatId, userId }) => {
-      socket.broadcast.to(chatId).emit("isTyping", { userId })
+      socket.broadcast.to(chatId).emit("isTyping", { userId, chatId })
     })
 
     socket.on("sendIsNotTyping", ({ chatId, userId }) => {
-      socket.broadcast.to(chatId).emit("isNotTyping", { userId })
+      socket.broadcast.to(chatId).emit("isNotTyping", { userId, chatId })
     })
 
     socket.on("sendMessage", async ({ chatId, userId, content }) => {
@@ -114,7 +116,10 @@ const socketHandler = (io) => {
           chat.lastMessage = newMessage._id
           await chat.save()
 
-          await newMessage.populate("sentBy", "username")
+          await newMessage.populate({
+            path: "sentBy",
+            model: "User"
+          })
 
           io.to(chatId).emit("message", {chatId, message: newMessage})
         } else {
