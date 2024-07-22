@@ -22,7 +22,12 @@ const HomePage = () => {
       sx={{
         position: "absolute",
         height: "100vh",
-        width: "100%"
+        width: "100%",
+        "--full-height": "100vh",
+        "@supports (height: 100dvh)": {
+          "--full-height": "100dvh"
+        },
+        height: "var(--full-height)"
       }}
     >
       <Paper
@@ -31,8 +36,8 @@ const HomePage = () => {
           position: "relative",
           top: 0,
           left: 0,
-          m: { xs: 0, md: "5vh" },
-          height: { xs: "100vh", md: "90vh" },
+          m: { xs: 0, md: "5%" },
+          height: { xs: "100%", md: "90%" },
           backgroundImage: "linear-gradient(45deg, rgb(35, 181, 211, 0.5), rgb(167, 85, 194, 0.5))"
           ,
           borderRadius: { xs: 0, md: "5px" }
@@ -42,7 +47,7 @@ const HomePage = () => {
         <Stack
           direction="row"
           sx={{
-            height: { xs: "92vh", md: "82vh" },
+            height: { xs: "93%", md: "91%" },
             width: "100%"
           }}
         >

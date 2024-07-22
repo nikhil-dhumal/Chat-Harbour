@@ -23,7 +23,7 @@ const MessageList = () => {
       gap={3}
       sx={{
         overflowY: "auto",
-        height: "80vh",
+        height: "100%",
         "&::-webkit-scrollbar": {
           display: "none"
         },

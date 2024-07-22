@@ -26,8 +26,7 @@ const Conversation = () => {
               gap={2}
               sx={{
                 px: 2,
-                pt: 1,
-                flexGrow: 1,
+                height: { xs: "92%", sm: "88%" },
                 width: "100%",
                 overflow: "auto"
               }}

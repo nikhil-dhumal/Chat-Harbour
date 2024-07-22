@@ -32,7 +32,7 @@ const ProfileBar = () => {
         alignItems="center"
         sx={{
           width: "100%",
-          height: "8vh",
+          height: { xs: "7%", sm: "9%" },
           borderBottom: `1px solid ${theme.palette.secondary.main}`
         }}
       >
