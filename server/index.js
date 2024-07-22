@@ -5,8 +5,8 @@ import { Server } from "socket.io"
 import cors from "cors"
 import "dotenv/config"
 
-import routes from "./src/routes/index.routes.js"
 import socketHandler from "./src/handlers/socket.handler.js"
+import routes from "./src/routes/index.routes.js"
 
 const app = express()
 const server = http.createServer(app)
@@ -30,7 +30,8 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
 app.use((req, res, next) => {
-  console.log(`Received ${req.method} request for ${req.url}`)
+  const indianTime = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+  console.log(`Received ${req.method} request for ${req.url} at ${indianTime}`)
   next()
 })
 
