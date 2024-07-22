@@ -24,7 +24,7 @@ const SignupPage = () => {
         mx: { xs: 0, md: "10%" },
         height: { xs: "100vh", md: "90vh" },
         borderRadius: { xs: 0, md: "10px" },
-        backgroundColor: "background.default"
+        bgcolor: "background.default"
       }}
     >
       <Stack

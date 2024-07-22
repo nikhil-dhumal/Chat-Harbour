@@ -74,7 +74,7 @@ const Message = ({ message }) => {
               <Paper
                 elevation={5}
                 sx={{
-                  backgroundColor: "rgba(35, 181, 211, 0.5)",
+                  bgcolor: "rgba(35, 181, 211, 0.5)",
                   p: 1,
                   borderRadius: 0,
                   borderTopLeftRadius: "5px",
@@ -120,7 +120,7 @@ const Message = ({ message }) => {
               <Paper
                 elevation={5}
                 sx={{
-                  backgroundColor: "rgba(167, 85, 194, 0.5)",
+                  bgcolor: "rgba(167, 85, 194, 0.5)",
                   p: 1,
                   borderRadius: 0,
                   borderTopRightRadius: "5px",
