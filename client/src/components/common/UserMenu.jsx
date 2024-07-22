@@ -21,9 +21,14 @@ const UserMenu = () => {
 
   const toggleMenu = (e) => setAnchorEl(e.currentTarget)
 
-  const handleClick = () => {
+  const handleUpdate = () => {
     setAnchorEl(null)
     navigate("/update")
+  }
+
+  const handleSignOut = () => {
+    dispatch(setUser(null))
+    navigate("/signin")
   }
 
   return (
@@ -60,13 +65,13 @@ const UserMenu = () => {
         anchorEl={anchorEl}
         onClose={() => setAnchorEl(null)}
       >
-        <MenuItem onClick={handleClick} >
+        <MenuItem onClick={handleUpdate} >
           <ListItemIcon>
             <LockResetIcon fontSize="small" />
           </ListItemIcon>
           <Typography>Update Password</Typography>
         </MenuItem>
-        <MenuItem onClick={() => dispatch(setUser(null))} >
+        <MenuItem onClick={handleSignOut} >
           <ListItemIcon>
             <LogoutIcon fontSize="small" />
           </ListItemIcon>
