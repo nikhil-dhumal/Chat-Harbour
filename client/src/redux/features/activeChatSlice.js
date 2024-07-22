@@ -12,7 +12,7 @@ export const activeChatSlice = createSlice({
     addMessage: (state, action) => {
       const { chatId, message } = action.payload
 
-      if (chatId !== state.activeChat.id) return
+      if (chatId !== state.activeChat?.id) return
 
       state.activeChat.messages = [...state.activeChat.messages, message]
     }
