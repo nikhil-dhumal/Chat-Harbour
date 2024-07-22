@@ -58,8 +58,7 @@ const MainLayout = () => {
         component="main"
         overflow="hidden"
         sx={{
-          minHeight: "100dvh",
-          minHeight: "100vh"
+          minHeight: "100dvh"
         }}
       >
         <Outlet />
