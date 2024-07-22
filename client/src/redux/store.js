@@ -6,6 +6,7 @@ import globalLoadingSlice from "./features/globalLoadingSlice"
 import onlineUsersSlice from "./features/onlineUsersSlice"
 import themeModeSlice from "./features/themeModeSlice"
 import userSlice from "./features/userSlice"
+import usersTypingSlice from "./features/usersTypingSlice"
 
 const store = configureStore({
   reducer: {
@@ -14,7 +15,8 @@ const store = configureStore({
     globalLoading: globalLoadingSlice,
     onlineUsers: onlineUsersSlice,
     themeMode: themeModeSlice,
-    user: userSlice
+    user: userSlice,
+    usersTyping: usersTypingSlice
   }
 })
 
