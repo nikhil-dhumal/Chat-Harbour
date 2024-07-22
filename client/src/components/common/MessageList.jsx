@@ -7,7 +7,7 @@ import Message from "./Message"
 
 const MessageList = () => {
   const { activeChat } = useSelector((state) => state.activeChat)
-  
+
   const messagesEndRef = useRef(null)
 
   const scrollToBottom = () => {
@@ -19,25 +19,27 @@ const MessageList = () => {
   }, [activeChat])
 
   return (
-    <Stack
-      gap={3}
-      sx={{
-        pt: 2,
-        overflowY: "auto",
-        height: "100%",
-        "&::-webkit-scrollbar": {
-          display: "none"
-        },
-        scrollbarWidth: "none"
-      }}
-    >
-      {
-        activeChat?.messages?.map((message, index) => (
-          <Message message={message} key={index} />
-        ))
-      }
+    <>
+      <Stack
+        gap={3}
+        sx={{
+          pt: 2,
+          overflowY: "auto",
+          height: "100%",
+          "&::-webkit-scrollbar": {
+            display: "none"
+          },
+          scrollbarWidth: "none"
+        }}
+      >
+        {
+          activeChat?.messages?.map((message, index) => (
+            <Message message={message} key={index} />
+          ))
+        }
+      </Stack>
       <div ref={messagesEndRef} />
-    </Stack>
+    </>
   )
 }
 
