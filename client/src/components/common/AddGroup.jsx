@@ -60,10 +60,10 @@ const AddGroup = () => {
       dispatch(setActiveChat(response))
       dispatch(addChat(response))
       sendNewChat(response.id, null)
+      handleClose()
     }
     if (err) toast.error(err.message)
     setIsAddGroupRequest(false)
-    handleClose()
   }
 
   return (
