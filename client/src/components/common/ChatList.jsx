@@ -1,7 +1,5 @@
-import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 
-import { useTheme } from "@emotion/react"
 import { Avatar, Badge, Stack, Typography } from "@mui/material"
 import GroupsIcon from "@mui/icons-material/Groups"
 
@@ -12,8 +10,6 @@ import { setActiveChat } from "../../redux/features/activeChatSlice"
 import getProfileImg from "../../utils/getProfileImg"
 
 const ChatList = () => {
-  const theme = useTheme()
-
   const dispatch = useDispatch()
 
   const { chats } = useSelector((state) => state.chats)
@@ -78,19 +74,10 @@ const ChatList = () => {
                   </Badge>
                 )
             }
-            <Stack
-              sx={{
-                flexGrow: 1
-              }}
-            >
-              {
-                chat.isGroup
-                  ? (
-                    <Typography>{chat.groupName}</Typography>
-                  ) : (
-                    <Typography>{chat.receiver.username}</Typography>
-                  )
-              }
+            <Stack alignItems="flex-start">
+              <Typography>
+                {chat.isGroup ? chat.groupName : chat.receiver.username}
+              </Typography>
               {
                 chat.lastMessage && (
                   <Typography
