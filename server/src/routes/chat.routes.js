@@ -24,7 +24,7 @@ router.post(
     .isLength({ min: 5 }).withMessage("Group name should be at least 5 characters long"),
   body("memberIds")
     .exists().withMessage("Member IDs are required")
-    .isArray({ min: 1, max: 29 }).withMessage("Members should be between 2 and 30 for a group"),
+    .isArray({ min: 2, max: 29 }).withMessage("Members should be between 3 and 30 for a group"),
   requestHandler.validate,
   chatController.newGroupChat
 )
