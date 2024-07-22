@@ -58,7 +58,7 @@ const MainLayout = () => {
         component="main"
         overflow="hidden"
         sx={{
-          minHeight: "100vh",
+          minHeight: "100dvh",
           height: "-webkit-fill-available"
         }}
       >
