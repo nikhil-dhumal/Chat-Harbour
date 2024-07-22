@@ -34,7 +34,7 @@ const ChatsBoard = () => {
         gap={1}
         sx={{
           width: "100%",
-          py: 2,
+          py: 1,
           pl: 2,
           pr: 1,
           borderBottom: `1px solid ${theme.palette.secondary.main}`,
