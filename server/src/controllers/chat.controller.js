@@ -1,4 +1,5 @@
 import responseHandler from "../handlers/response.handler.js"
+
 import chatModel from "../models/chat.model.js"
 import userModel from "../models/user.model.js"
 
@@ -83,6 +84,11 @@ const newGroupChat = async (req, res) => {
 
     await chat.save()
 
+    await chat.populate({
+      path: "members",
+      model: "User"
+    })
+
     return responseHandler.created(res, chat.toJSON())
   } catch (error) {
     console.error("Error creating new group chat:", error)
@@ -103,17 +109,20 @@ const getAllChats = async (req, res) => {
           model: "User"
         }
       })
+      .populate({
+        path: "members",
+        model: "User"
+      })
+      .populate({
+        path: "lastMessage",
+        model: "Message"
+      })
       .sort("-updatedAt")
 
     const formattedChats = await Promise.all(chats.map(async (chat) => {
       if (chat.isGroup) {
         return chat.toJSON()
       } else {
-        await chat.populate({
-          path: "members",
-          model: "User"
-        })
-
         return {
           ...chat.toJSON(),
           receiver: chat.getReceiver(req.user.id)
@@ -141,6 +150,14 @@ const getDetails = async (req, res) => {
           model: "User"
         }
       })
+      .populate({
+        path: "members",
+        model: "User"
+      })
+      .populate({
+        path: "lastMessage",
+        model: "Message"
+      })
 
     if (!chat) {
       return responseHandler.badrequest(res, "Chat not found")
@@ -149,11 +166,6 @@ const getDetails = async (req, res) => {
     if (chat.isGroup) {
       return responseHandler.ok(res, chat.toJSON())
     } else {
-      await chat.populate({
-        path: "members",
-        model: "User"
-      })
-
       return responseHandler.ok(res, {
         ...chat.toJSON(),
         receiver: chat.getReceiver(req.user.id)
