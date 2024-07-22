@@ -56,9 +56,11 @@ const MainLayout = () => {
       <GlobalLoading />
       <Box
         component="main"
-        flexGrow={1}
         overflow="hidden"
-        minHeight="100vh"
+        sx={{
+          minHeight: "100dvh",
+          height: "-webkit-fill-available"
+        }}
       >
         <Outlet />
       </Box>
