@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useSelector } from "react-redux"
+
 import { useTheme } from "@emotion/react"
 import { IconButton, Stack, TextField } from "@mui/material"
 import SendIcon from "@mui/icons-material/Send"
+
 import { useSocket } from "../../contexts/SocketContext"
 
 const MessageInput = () => {
@@ -10,13 +12,20 @@ const MessageInput = () => {
 
   const { sendMessage, isTyping, isNotTyping } = useSocket()
   
+  const typingTimeoutRef = useRef(null)
+  const isTypingRef = useRef(false)
+
   const { activeChat } = useSelector((state) => state.activeChat)
 
   const [message, setMessage] = useState("")
-  const [typingTimeout, setTypingTimeout] = useState(null)
 
-  const sendMessageHandler = () => {
+  const handleSendMessage = () => {
     if (message.trim() === "") return
+
+    if (isTypingRef.current) {
+      isNotTyping(activeChat.id)
+      isTypingRef.current = false
+    }
 
     sendMessage(activeChat.id, message.trim())
     setMessage("")
@@ -24,31 +33,50 @@ const MessageInput = () => {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
-      sendMessageHandler()
+      handleSendMessage()
     }
   }
+
+  useEffect(() => {
+    if (!activeChat) {
+      setMessage("")
+      return
+    }
+    setMessage("")
+  }, [activeChat?.id])
 
   useEffect(() => {
     if (!activeChat) return
 
     const handleTyping = () => {
-      // isTyping(activeChat.id)
+      if (message.trim() !== "") {
+        if (!isTypingRef.current) {
+          isTyping(activeChat.id)
+          isTypingRef.current = true
+        }
+        
+        if (typingTimeoutRef.current) {
+          clearTimeout(typingTimeoutRef.current)
+        }
 
-      clearTimeout(typingTimeout)
-
-      const timeout = setTimeout(() => {
-        // isNotTyping(activeChat.id)
-      }, 3000)
-
-      setTypingTimeout(timeout)
+        typingTimeoutRef.current = setTimeout(() => {
+          isNotTyping(activeChat.id)
+          isTypingRef.current = false
+        }, 2000)
+      } else if (isTypingRef.current) {
+        isNotTyping(activeChat.id)
+        isTypingRef.current = false
+      }
     }
 
     handleTyping()
 
     return () => {
-      clearTimeout(typingTimeout)
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current)
+      }
     }
-  }, [message, activeChat, isTyping, isNotTyping, typingTimeout])
+  }, [message, activeChat, isTyping, isNotTyping])
 
   return (
     <Stack
@@ -78,7 +106,7 @@ const MessageInput = () => {
         onChange={(e) => setMessage(e.target.value)}
         onKeyDown={handleKeyDown}
       />
-      <IconButton onClick={sendMessageHandler}>
+      <IconButton onClick={handleSendMessage}>
         <SendIcon />
       </IconButton>
     </Stack>
