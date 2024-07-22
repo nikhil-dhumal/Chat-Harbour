@@ -86,7 +86,8 @@ const MessageInput = () => {
       gap={1}
       sx={{
         width: "100%",
-        height: "10vh",
+        minHeight: "10vh",
+        minHeight: "10dvh",
         pl: 2,
         pr: 1,
         borderTop: `1px solid ${theme.palette.secondary.main}`
