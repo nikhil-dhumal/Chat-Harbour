@@ -21,7 +21,7 @@ const HomePage = () => {
     <Box
       sx={{
         position: "absolute",
-        height: "100vh",
+        height: "100%",
         width: "100%"
       }}
     >
