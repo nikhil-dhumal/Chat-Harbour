@@ -9,6 +9,7 @@ import chatApi from "../../api/modules/chat.api"
 import { useSocket } from "../../contexts/SocketContext"
 
 import { setActiveChat } from "../../redux/features/activeChatSlice"
+import { addChat } from "../../redux/features/chatsSlice"
 
 import getProfileImg from "../../utils/getProfileImg"
 
@@ -35,6 +36,7 @@ const SearchList = ({ searchQuery }) => {
 
     if (response) {
       dispatch(setActiveChat(response))
+      dispatch(addChat(response))
       sendNewChat(response.id, id)
     }
     if (err) dispatch(setActiveChat(null))
