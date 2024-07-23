@@ -10,7 +10,15 @@ export const chatsSlice = createSlice({
       state.chats = [...action.payload]
     },
     addChat: (state, action) => {
-      state.chats = [action.payload, ...state.chats]
+      const newChat = action.payload
+      const chatIndex = state.chats.findIndex(chat => chat.id === newChat.id)
+
+      if (chatIndex !== -1) {
+        const [updatedChat] = state.chats.splice(chatIndex, 1)
+        state.chats.unshift(updatedChat)
+      } else {
+        state.chats.unshift(newChat)
+      }
     },
     addMessageToChat: (state, action) => {
       const { chatId, message } = action.payload
