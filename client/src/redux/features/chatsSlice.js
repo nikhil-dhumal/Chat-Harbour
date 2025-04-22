@@ -14,21 +14,22 @@ export const chatsSlice = createSlice({
       const chatIndex = state.chats.findIndex(chat => chat.id === newChat.id)
 
       if (chatIndex !== -1) {
-        const [updatedChat] = state.chats.splice(chatIndex, 1)
-        state.chats.unshift(updatedChat)
-      } else {
-        state.chats.unshift(newChat)
+        state.chats.splice(chatIndex, 1)
       }
+      state.chats.unshift(newChat)
     },
     addMessageToChat: (state, action) => {
       const { chatId, message } = action.payload
       const chatIndex = state.chats.findIndex(chat => chat.id === chatId)
 
       if (chatIndex !== -1) {
-        state.chats[chatIndex].messages.push(message)
-        state.chats[chatIndex].lastMessage = message
-        const [updatedChat] = state.chats.splice(chatIndex, 1)
-        state.chats.unshift(updatedChat)
+        const chat = state.chats[chatIndex]
+        if (!chat.messages) chat.messages = []
+        chat.messages.push(message)
+        chat.lastMessage = message
+
+        state.chats.splice(chatIndex, 1)
+        state.chats.unshift(chat)
       }
     }
   }
